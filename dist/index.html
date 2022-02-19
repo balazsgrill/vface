@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+<title>VFace</title>
+<meta charset="utf-8"/>
+<style>
+html {
+  	height: 100%;
+	overflow: hidden;
+}
+body {
+	min-height: 100%;
+	overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div id="vugu_mount_point"  style="height: 100%;">
+<img style="position: absolute; top: 50%; left: 50%;" src="https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif">
+</div>
+<script src="/wasm_exec.js"></script>
+<!-- scripts -->
+<script>
+var wasmSupported = (typeof WebAssembly === "object");
+if (wasmSupported) {
+	if (!WebAssembly.instantiateStreaming) { // polyfill
+		WebAssembly.instantiateStreaming = async (resp, importObject) => {
+			const source = await (await resp).arrayBuffer();
+			return await WebAssembly.instantiate(source, importObject);
+		};
+	}
+	var mainWasmReq = fetch("/main.wasm").then(function(res) {
+		if (res.ok) {
+			const go = new Go();
+			WebAssembly.instantiateStreaming(res, go.importObject).then((result) => {
+				go.run(result.instance);
+			});		
+		} else {
+			res.text().then(function(txt) {
+				var el = document.getElementById("vugu_mount_point");
+				el.style = 'font-family: monospace; background: black; color: red; padding: 10px';
+				el.innerText = txt;
+			})
+		}
+	})
+} else {
+	document.getElementById("vugu_mount_point").innerHTML = 'This application requires WebAssembly support.  Please upgrade your browser.';
+}
+</script>
+</body>
+</html>

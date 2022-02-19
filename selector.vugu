@@ -1,0 +1,3 @@
+<select @change='c.handleChange(event)' :class='c.Class'>
+    <option vg-for="k, v := range c.Model.Options" :value='v' :selected='c.Model.Selection == v' vg-content='c.Model.Labels[k]'></option>
+</select>

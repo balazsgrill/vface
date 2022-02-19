@@ -1,0 +1,9 @@
+<div>
+    <vface:Textedit :Model='&c.Model.TexteditModel'></vface:Textedit>
+    <vface:Button :Model='&c.Model.ButtonModel'></vface:Button>
+    <vface:Selector :Model='&c.Model.SelectorModel'></vface:Selector>
+</div>
+
+<script type="application/x-go">
+    import "github.com/balazsgrill/vface"
+</script>
