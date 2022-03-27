@@ -8,12 +8,26 @@ type ButtonModel struct {
 	Action func(vugu.DOMEvent)
 }
 
+type IButtonModel interface {
+	IModel
+	GetLabel() string
+	Pressed(vugu.DOMEvent)
+}
+
+func (m *ButtonModel) GetLabel() string {
+	return m.Label
+}
+
+func (m *ButtonModel) Pressed(event vugu.DOMEvent) {
+	if m.Action != nil {
+		m.Action(event)
+	}
+}
+
 type Button struct {
-	View[*ButtonModel]
+	View[IButtonModel]
 }
 
 func (c *Button) onClick(event vugu.DOMEvent) {
-	if c.Model.Action != nil {
-		c.Model.Action(event)
-	}
+	c.Model.Pressed(event)
 }

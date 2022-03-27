@@ -10,7 +10,8 @@ type Control interface {
 }
 
 type IModel interface {
-	Identifer() string
+	Identifier() string
+	IsReadonly() bool
 }
 
 /* Base struct for the Model */
@@ -19,11 +20,16 @@ type Model struct {
 	Readonly bool
 }
 
-func (m *Model) Identifer() string {
+func (m *Model) IsReadonly() bool {
+	return m.Readonly
+}
+
+func (m *Model) Identifier() string {
 	return m.ID
 }
 
 type IView interface {
+	vugu.Builder
 	setControl(Control)
 }
 

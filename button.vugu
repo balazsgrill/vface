@@ -1,1 +1,1 @@
-<a @click="c.onClick(event)" :class='c.Class' vg-content="c.Model.Label"></a>
+<a @click="c.onClick(event)" :class='c.Class' vg-content="c.Model.GetLabel()"></a>
