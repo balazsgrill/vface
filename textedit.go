@@ -37,6 +37,7 @@ type Textedit struct {
 	View[ITexteditModel]
 	Multiline    bool
 	DefaultValue string
+	Key          KeyHandler
 
 	editing bool
 }
@@ -90,4 +91,16 @@ func (c *Textedit) datalistID() string {
 		return c.Model.Identifier() + "_datalist"
 	}
 	return ""
+}
+
+func (c *Textedit) onKey(event vugu.DOMEvent, kind KeyEventKind) {
+	if c.Key != nil {
+		jsevent := event.JSEvent()
+		key := jsevent.Get("key").String()
+		c.Key.HandleKey(KeyEvent{
+			DOMEvent: event,
+			Kind:     kind,
+			Key:      key,
+		})
+	}
 }
