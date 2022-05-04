@@ -6,15 +6,28 @@ import (
 )
 
 type vmanager[M IModel] struct {
-	eventenv vugu.EventEnv
-	buildenv *vugu.BuildEnv
-	renderer *domrender.JSRenderer
+	eventenv    vugu.EventEnv
+	buildenv    *vugu.BuildEnv
+	renderer    *domrender.JSRenderer
+	viewFactory ViewFactory
 
 	IModel M
 }
 
-func NewControl[T IModel](mountPoint string, IModel T) Control {
-	renderer, err := domrender.New(mountPoint)
+type ControlConfig struct {
+	MountPoint  string
+	ViewFactory ViewFactory
+}
+
+func NewDefaultConfig() *ControlConfig {
+	return &ControlConfig{
+		MountPoint:  "#vugu_mount_point",
+		ViewFactory: ViewFactoryFunc(DefaultViewFactory),
+	}
+}
+
+func NewControl[T IModel](config *ControlConfig, IModel T) Control {
+	renderer, err := domrender.New(config.MountPoint)
 	if err != nil {
 		panic(err)
 	}
@@ -24,10 +37,11 @@ func NewControl[T IModel](mountPoint string, IModel T) Control {
 		panic(err)
 	}
 	v := &vmanager[T]{
-		eventenv: renderer.EventEnv(),
-		buildenv: buildEnv,
-		renderer: renderer,
-		IModel:   IModel,
+		eventenv:    renderer.EventEnv(),
+		buildenv:    buildEnv,
+		renderer:    renderer,
+		viewFactory: config.ViewFactory,
+		IModel:      IModel,
 	}
 	buildEnv.SetWireFunc(v.SetUp)
 	return v
@@ -36,6 +50,9 @@ func NewControl[T IModel](mountPoint string, IModel T) Control {
 func (v *vmanager[T]) SetUp(component vugu.Builder) {
 	if c, ok := component.(IView); ok {
 		c.setControl(v)
+	}
+	if c, ok := component.(IDynamicView); ok {
+		c.setViewFactory(v.viewFactory)
 	}
 }
 

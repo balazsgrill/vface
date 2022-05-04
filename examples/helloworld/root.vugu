@@ -1,5 +1,5 @@
 <div>
-    <vface:Textedit :Model='&c.Model.TexteditModel' @Key='fmt.Printf("Key: %s, event: %d", event.Key, event.Kind)'></vface:Textedit>
+    <vface:Textedit :Model='&c.Model.TexteditModel'></vface:Textedit>
     <vface:Button :Model='&c.Model.ButtonModel'></vface:Button>
     <vface:Selector :Model='&c.Model.SelectorModel'></vface:Selector>
 </div>

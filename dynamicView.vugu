@@ -1,0 +1,3 @@
+<div class="dynamicview">
+    <vg-comp expr="c.getView()"></vg-comp>
+</div>

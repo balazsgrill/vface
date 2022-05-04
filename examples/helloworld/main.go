@@ -37,7 +37,7 @@ func main() {
 		fmt.Printf("Text field content is %s\n", model.TexteditModel.Content)
 	}
 	root.Model = model
-	control := vface.NewControl("#vugu_mount_point", model)
+	control := vface.NewControl(vface.NewDefaultConfig(), model)
 	defer control.Close()
 
 	control.Run(root)
