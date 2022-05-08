@@ -9,6 +9,7 @@ func (c *TableView) Build(vgin *vugu.BuildIn) (vgout *vugu.BuildOut) {
 	var vgiterkey interface{}
 	_ = vgiterkey
 	table := &vugu.VGNode{Type: vugu.VGNodeType(3), Namespace: "", Data: "table", Attr: []vugu.VGAttribute(nil)}
+	table.AddAttrInterface("class", c.Class)
 	vgout.Out = append(vgout.Out, table) // root for output
 	{
 		for vgiterkeyt, m := range c.Model.Rows() {

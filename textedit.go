@@ -16,7 +16,6 @@ type ITexteditModel interface {
 	IModel
 	GetContent() string
 	SetContent(string, vugu.DOMEvent)
-	Datalist() []string
 }
 
 var _ ITexteditModel = &TexteditModel{}
@@ -29,14 +28,11 @@ func (m *TexteditModel) SetContent(updated string, _ vugu.DOMEvent) {
 	m.Content = updated
 }
 
-func (m *TexteditModel) Datalist() []string {
-	return nil
-}
-
 type Textedit struct {
 	View[ITexteditModel]
 	Multiline    bool
 	DefaultValue string
+	DatalistID   string
 
 	editing bool
 }
@@ -83,13 +79,6 @@ func (c *Textedit) displayClass() string {
 		defaultclass = " textedit-default"
 	}
 	return c.Class + defaultclass
-}
-
-func (c *Textedit) datalistID() string {
-	if len(c.Model.Datalist()) > 0 {
-		return c.Model.Identifier() + "_datalist"
-	}
-	return ""
 }
 
 func (c *Textedit) onKey(event vugu.DOMEvent, kind KeyEventKind) {

@@ -15,5 +15,10 @@ func DefaultViewFactory(v IModel) vugu.Builder {
 		v.Model = m2
 		return v
 	}
+	if m2, ok := v.(IButtonModel); ok {
+		v := &Button{}
+		v.Model = m2
+		return v
+	}
 	return nil
 }

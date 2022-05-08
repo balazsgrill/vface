@@ -10,20 +10,9 @@ type vmanager[M IModel] struct {
 	buildenv    *vugu.BuildEnv
 	renderer    *domrender.JSRenderer
 	viewFactory ViewFactory
+	setup       []SetUpFunc
 
 	IModel M
-}
-
-type ControlConfig struct {
-	MountPoint  string
-	ViewFactory ViewFactory
-}
-
-func NewDefaultConfig() *ControlConfig {
-	return &ControlConfig{
-		MountPoint:  "#vugu_mount_point",
-		ViewFactory: ViewFactoryFunc(DefaultViewFactory),
-	}
 }
 
 func NewControl[T IModel](config *ControlConfig, IModel T) Control {
@@ -41,6 +30,7 @@ func NewControl[T IModel](config *ControlConfig, IModel T) Control {
 		buildenv:    buildEnv,
 		renderer:    renderer,
 		viewFactory: config.ViewFactory,
+		setup:       config.SetUp,
 		IModel:      IModel,
 	}
 	buildEnv.SetWireFunc(v.SetUp)
@@ -53,6 +43,9 @@ func (v *vmanager[T]) SetUp(component vugu.Builder) {
 	}
 	if c, ok := component.(IDynamicView); ok {
 		c.setViewFactory(v.viewFactory)
+	}
+	for _, setup := range v.setup {
+		setup(component)
 	}
 }
 

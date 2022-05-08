@@ -15,6 +15,7 @@ func (c *RowView) Build(vgin *vugu.BuildIn) (vgout *vugu.BuildOut) {
 	vgout = &vugu.BuildOut{}
 
 	tr := &vugu.VGNode{Type: vugu.VGNodeType(3), Namespace: "", Data: "tr", Attr: []vugu.VGAttribute(nil)}
+	tr.AddAttrInterface("class", c.Class)
 	vgout.Out = append(vgout.Out, tr) // root for output
 	for vgiterkeyt, m := range c.Model.Cells() {
 		var vgiterkey interface{} = vgiterkeyt

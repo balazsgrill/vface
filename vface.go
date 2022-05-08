@@ -10,22 +10,16 @@ type Control interface {
 }
 
 type IModel interface {
-	Identifier() string
 	IsReadonly() bool
 }
 
 /* Base struct for the Model */
 type Model struct {
-	ID       string
 	Readonly bool
 }
 
 func (m *Model) IsReadonly() bool {
 	return m.Readonly
-}
-
-func (m *Model) Identifier() string {
-	return m.ID
 }
 
 type IView interface {
