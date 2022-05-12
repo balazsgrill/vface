@@ -38,7 +38,7 @@ func (tabke *Table) Rows() []IRow {
 	return tabke.RowModels
 }
 
-type RowView View[IRow]
+type RowView struct{ View[IRow] }
 
 func (c *RowView) isHeader(model IModel) bool {
 	if m2, ok := model.(ICell); ok {
@@ -47,4 +47,4 @@ func (c *RowView) isHeader(model IModel) bool {
 	return false
 }
 
-type TableView View[ITable]
+type TableView struct{ View[ITable] }

@@ -18,7 +18,7 @@ func (c *TableView) Build(vgin *vugu.BuildIn) (vgout *vugu.BuildOut) {
 			m := m
 			_ = m
 			{
-				vgcompKey := vugu.MakeCompKey(0x7B0BFB805C3E66F^vgin.CurrentPositionHash(), vgiterkey)
+				vgcompKey := vugu.MakeCompKey(0x7B0BFB805C3E66F^vgin.CurrentPositionHash(), c.GetKey(vgiterkeyt, m))
 				// ask BuildEnv for prior instance of this specific component
 				vgcomp, _ := vgin.BuildEnv.CachedComponent(vgcompKey).(*RowView)
 				if vgcomp == nil {

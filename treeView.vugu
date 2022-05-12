@@ -1,0 +1,32 @@
+<div class = "treeitem-parent">
+    <p :class = '"treeitem container text-secondary "+c.Class'>
+    <a @click="c.toogle(event)" vg-if="0 < len(c.Model.Children())">
+        <i vg-if="c.Model.IsExpanded()" class="bi bi-caret-down"></i>
+        <i vg-if="!c.Model.IsExpanded()" class="bi bi-caret-right"></i>
+    </a>
+    <vface:DynamicView :Model='c.Model.Item()'></vface:DynamicView>
+    </p>
+    <vg-template vg-if="c.Model.IsExpanded()">
+        <vface:TreeView vg-for="_, ch := range c.Model.Children()"></vface:TreeView>
+    </<vg-template>
+</div>
+
+<style>
+
+.treeitem {
+    padding: 0;
+    margin: 0;
+    padding-left: 1em;
+}
+.treeitem:hover {
+    background: #333333;
+}
+.treeitem-parent {
+    padding: 0;
+    margin: 0;
+    padding-left:1em;
+}
+.treeitem-untitled {
+    color: #666;
+}
+</style>

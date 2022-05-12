@@ -18,7 +18,6 @@ func (c *RowView) Build(vgin *vugu.BuildIn) (vgout *vugu.BuildOut) {
 	tr.AddAttrInterface("class", c.Class)
 	vgout.Out = append(vgout.Out, tr) // root for output
 	for vgiterkeyt, m := range c.Model.Cells() {
-		var vgiterkey interface{} = vgiterkeyt
 		var td *vugu.VGNode
 		if c.isHeader(m) {
 			td = &vugu.VGNode{Type: vugu.VGNodeType(3), Namespace: "", Data: "th", Attr: []vugu.VGAttribute(nil)}
@@ -26,7 +25,7 @@ func (c *RowView) Build(vgin *vugu.BuildIn) (vgout *vugu.BuildOut) {
 			td = &vugu.VGNode{Type: vugu.VGNodeType(3), Namespace: "", Data: "td", Attr: []vugu.VGAttribute(nil)}
 		}
 		tr.AppendChild(td)
-		vgcompKey := vugu.MakeCompKey(0x40F300827B5F8D20^vgin.CurrentPositionHash(), vgiterkey)
+		vgcompKey := vugu.MakeCompKey(0x40F300827B5F8D20^vgin.CurrentPositionHash(), c.GetKey(vgiterkeyt, m))
 		// ask BuildEnv for prior instance of this specific component
 		vgcomp, _ := vgin.BuildEnv.CachedComponent(vgcompKey).(*DynamicView)
 		if vgcomp == nil {

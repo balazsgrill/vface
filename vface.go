@@ -1,6 +1,10 @@
 package vface
 
-import "github.com/vugu/vugu"
+import (
+	"fmt"
+
+	"github.com/vugu/vugu"
+)
 
 type Control interface {
 	/* Indicates that the given model is changed by a control */
@@ -9,17 +13,45 @@ type Control interface {
 	Run(root vugu.Builder) error
 }
 
+type IEventContext interface {
+	TriggerChanged(IModel)
+}
+
+type vuguEvent struct {
+	vugu.DOMEvent
+}
+
+func WrapEvent(event vugu.DOMEvent) IEventContext {
+	return &vuguEvent{
+		DOMEvent: event,
+	}
+}
+
+func (c *vuguEvent) TriggerChanged(IModel) {
+	c.EventEnv().Lock()
+	c.EventEnv().UnlockRender()
+}
+
 type IModel interface {
 	IsReadonly() bool
+}
+
+type Identifiable interface {
+	Identifier() string
 }
 
 /* Base struct for the Model */
 type Model struct {
 	Readonly bool
+	ID       string
 }
 
 func (m *Model) IsReadonly() bool {
 	return m.Readonly
+}
+
+func (m *Model) Identifier() string {
+	return m.ID
 }
 
 type IView interface {
@@ -44,6 +76,18 @@ type View[M IModel] struct {
 
 	/* CSS Class */
 	Class string
+}
+
+func (v *View[T]) GetKey(iterator int, model IModel) string {
+	if model != nil {
+		if ide, ok := model.(Identifiable); ok {
+			i := ide.Identifier()
+			if i != "" {
+				return i
+			}
+		}
+	}
+	return fmt.Sprint(iterator)
 }
 
 func (v *View[T]) Update(event vugu.DOMEvent) {

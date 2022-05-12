@@ -5,20 +5,20 @@ import "github.com/vugu/vugu"
 type ButtonModel struct {
 	Model
 	Label  string
-	Action func(vugu.DOMEvent)
+	Action func(IEventContext)
 }
 
 type IButtonModel interface {
 	IModel
 	GetLabel() string
-	Pressed(vugu.DOMEvent)
+	Pressed(IEventContext)
 }
 
 func (m *ButtonModel) GetLabel() string {
 	return m.Label
 }
 
-func (m *ButtonModel) Pressed(event vugu.DOMEvent) {
+func (m *ButtonModel) Pressed(event IEventContext) {
 	if m.Action != nil {
 		m.Action(event)
 	}
@@ -29,5 +29,5 @@ type Button struct {
 }
 
 func (c *Button) onClick(event vugu.DOMEvent) {
-	c.Model.Pressed(event)
+	c.Model.Pressed(WrapEvent(event))
 }

@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/balazsgrill/vface"
-	"github.com/vugu/vugu"
 )
 
 func main() {
@@ -32,7 +31,7 @@ func main() {
 			Selection: "op2",
 		},
 	}
-	model.ButtonModel.Action = func(vugu.DOMEvent) {
+	model.ButtonModel.Action = func(vface.IEventContext) {
 		fmt.Printf("Current seleciton is %s\n", model.SelectorModel.Selection)
 		fmt.Printf("Text field content is %s\n", model.TexteditModel.Content)
 	}
