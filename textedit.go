@@ -1,8 +1,6 @@
 package vface
 
 import (
-	"fmt"
-
 	"github.com/vugu/vugu"
 	js "github.com/vugu/vugu/js"
 )
@@ -42,7 +40,6 @@ func (c *Textedit) focusLost(event vugu.DOMEvent) {
 	c.editing = !c.editing
 	c.Model.SetContent(updated, event)
 	c.Update(event)
-	fmt.Println("Focus lost!")
 }
 
 func setFocus(element js.Value) {
@@ -52,9 +49,6 @@ func setFocus(element js.Value) {
 func (c *Textedit) onClick(event vugu.DOMEvent) {
 	if !c.Model.IsReadonly() {
 		c.editing = true
-		fmt.Println("Editing!")
-	} else {
-		fmt.Println("Readonly!")
 	}
 }
 

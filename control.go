@@ -11,6 +11,7 @@ type vmanager[M IModel] struct {
 	renderer    *domrender.JSRenderer
 	viewFactory ViewFactory
 	setup       []SetUpFunc
+	modelSetup  []ModelSetupFunc
 
 	IModel M
 }
@@ -31,6 +32,7 @@ func NewControl[T IModel](config *ControlConfig, IModel T) Control {
 		renderer:    renderer,
 		viewFactory: config.ViewFactory,
 		setup:       config.SetUp,
+		modelSetup:  config.ModelSetup,
 		IModel:      IModel,
 	}
 	buildEnv.SetWireFunc(v.SetUp)
@@ -40,6 +42,10 @@ func NewControl[T IModel](config *ControlConfig, IModel T) Control {
 func (v *vmanager[T]) SetUp(component vugu.Builder) {
 	if c, ok := component.(IView); ok {
 		c.setControl(v)
+		m := c.getModel()
+		for _, setup := range v.modelSetup {
+			setup(m)
+		}
 	}
 	if c, ok := component.(IDynamicView); ok {
 		c.setViewFactory(v.viewFactory)

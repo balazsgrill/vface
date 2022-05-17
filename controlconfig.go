@@ -6,9 +6,12 @@ type ControlConfig struct {
 	MountPoint  string
 	ViewFactory ViewFactory
 	SetUp       []SetUpFunc
+	ModelSetup  []ModelSetupFunc
 }
 
 type SetUpFunc func(component vugu.Builder)
+
+type ModelSetupFunc func(model IModel)
 
 func NewDefaultConfig() *ControlConfig {
 	return &ControlConfig{
@@ -46,5 +49,10 @@ func (c *ControlConfig) CascadeViewFactory(viewfactory ViewFactory) *ControlConf
 
 func (c *ControlConfig) WithSetUp(setup SetUpFunc) *ControlConfig {
 	c.SetUp = append(c.SetUp, setup)
+	return c
+}
+
+func (c *ControlConfig) WithModelSetUp(setup ModelSetupFunc) *ControlConfig {
+	c.ModelSetup = append(c.ModelSetup, setup)
 	return c
 }

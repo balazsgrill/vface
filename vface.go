@@ -57,6 +57,7 @@ func (m *Model) Identifier() string {
 type IView interface {
 	vugu.Builder
 	setControl(Control)
+	getModel() IModel
 }
 
 type IDynamicView interface {
@@ -66,6 +67,10 @@ type IDynamicView interface {
 
 func (v *View[_]) setControl(c Control) {
 	v.control = c
+}
+
+func (v *View[T]) getModel() IModel {
+	return v.Model
 }
 
 /* Base struct for every Component */
