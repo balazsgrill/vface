@@ -13,7 +13,12 @@ type TexteditModel struct {
 type ITexteditModel interface {
 	IModel
 	GetContent() string
-	SetContent(string, vugu.DOMEvent)
+	SetContent(string, IEventContext)
+}
+
+type IRenderedTexteditModel interface {
+	ITexteditModel
+	GetRenderedContent() string
 }
 
 var _ ITexteditModel = &TexteditModel{}
@@ -22,7 +27,7 @@ func (m *TexteditModel) GetContent() string {
 	return m.Content
 }
 
-func (m *TexteditModel) SetContent(updated string, _ vugu.DOMEvent) {
+func (m *TexteditModel) SetContent(updated string, _ IEventContext) {
 	m.Content = updated
 }
 
@@ -38,7 +43,7 @@ type Textedit struct {
 func (c *Textedit) focusLost(event vugu.DOMEvent) {
 	updated := event.JSEventTarget().Get("value").String()
 	c.editing = !c.editing
-	c.Model.SetContent(updated, event)
+	c.Model.SetContent(updated, WrapEvent(event))
 	c.Update(event)
 }
 
@@ -52,15 +57,21 @@ func (c *Textedit) onClick(event vugu.DOMEvent) {
 	}
 }
 
-func (c *Textedit) displayContent() string {
-	var value string
+func (c *Textedit) displayContent() interface{} {
 	if c.Model != nil {
-		value = c.Model.GetContent()
+		if r, ok := c.Model.(IRenderedTexteditModel); ok {
+			html := r.GetRenderedContent()
+			if html != "" {
+				return vugu.HTML(html)
+			}
+		} else {
+			value := c.Model.GetContent()
+			if value != "" {
+				return value
+			}
+		}
 	}
-	if value == "" {
-		value = c.DefaultValue
-	}
-	return value
+	return c.DefaultValue
 }
 
 func (c *Textedit) displayClass() string {
@@ -72,7 +83,7 @@ func (c *Textedit) displayClass() string {
 	if value == "" {
 		defaultclass = " textedit-default"
 	}
-	return c.Class + defaultclass
+	return c.getClass() + defaultclass
 }
 
 func (c *Textedit) onKey(event vugu.DOMEvent, kind KeyEventKind) {

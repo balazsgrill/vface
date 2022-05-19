@@ -36,6 +36,10 @@ type IModel interface {
 	IsReadonly() bool
 }
 
+type IClassProvider interface {
+	GetClass() string
+}
+
 type Identifiable interface {
 	Identifier() string
 }
@@ -58,6 +62,7 @@ type IView interface {
 	vugu.Builder
 	setControl(Control)
 	getModel() IModel
+	getClass() string
 }
 
 type IDynamicView interface {
@@ -81,6 +86,13 @@ type View[M IModel] struct {
 
 	/* CSS Class */
 	Class string
+}
+
+func (v *View[T]) getClass() string {
+	if cp, ok := any(v.Model).(IClassProvider); ok {
+		return v.Class + " " + cp.GetClass()
+	}
+	return v.Class
 }
 
 func (v *View[T]) GetKey(iterator int, model IModel) string {

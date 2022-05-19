@@ -47,6 +47,14 @@ func (c *ControlConfig) CascadeViewFactory(viewfactory ViewFactory) *ControlConf
 	return c
 }
 
+func (c *ControlConfig) OverrideViewFactory(viewfactory ViewFactory) *ControlConfig {
+	c.ViewFactory = &cascadedViewFactory{
+		base:     viewfactory,
+		addition: c.ViewFactory,
+	}
+	return c
+}
+
 func (c *ControlConfig) WithSetUp(setup SetUpFunc) *ControlConfig {
 	c.SetUp = append(c.SetUp, setup)
 	return c

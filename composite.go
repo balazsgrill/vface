@@ -1,16 +1,19 @@
 package vface
 
-type IMapModel interface {
+type IList interface {
 	IModel
-	GetByKey(key string) IModel
-	SetByKey(key string, value IModel)
+	GetElements() []IModel
 }
 
-type IList[M IModel] interface {
-	IModel
-	Size() uint
-	Get(uint) M
-	Update(uint, M)
-	Remove(uint)
-	Insert(uint, M)
+type List struct {
+	Model
+	Elements []IModel
+}
+
+func (l *List) GetElements() []IModel {
+	return l.Elements
+}
+
+type Composite struct {
+	View[IList]
 }

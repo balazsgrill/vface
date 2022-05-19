@@ -1,5 +1,5 @@
-<div :class='c.Class'>
-    <input vg-if='c.editing && !c.Multiline' type="text" :class='c.Class' :value='c.Model.GetContent()' @focusout='c.focusLost(event)' vg-js-create='setFocus(value)' :list='c.DatalistID'></input>
-    <textarea vg-if='c.editing && c.Multiline' vg-content='c.Model.GetContent()' @focusout='c.focusLost(event)' vg-js-create="setFocus(value)" :class='c.Class'></textarea>
+<div :class='c.getClass()'>
+    <input vg-if='c.editing && !c.Multiline' type="text" :class='c.getClass()' :value='c.Model.GetContent()' @focusout='c.focusLost(event)' vg-js-create='setFocus(value)' :list='c.DatalistID'></input>
+    <textarea vg-if='c.editing && c.Multiline' vg-content='c.Model.GetContent()' @focusout='c.focusLost(event)' vg-js-create="setFocus(value)" :class='c.getClass()'></textarea>
     <span vg-if="!c.editing" :class='c.displayClass()' vg-content='c.displayContent()' @click='c.onClick(event)'></span>
 </div>

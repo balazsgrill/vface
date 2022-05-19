@@ -1,0 +1,3 @@
+<div :class='"list "+c.getClass()'>
+<vface:DynamicView vg-for='_, m := range c.Model.GetElements()' :Model='m'></vface:DynamicView>
+</div>
