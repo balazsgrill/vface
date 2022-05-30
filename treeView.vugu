@@ -7,6 +7,6 @@
     <vface:DynamicView :Model='c.Model.Item()'></vface:DynamicView>
     </p>
     <vg-template vg-if="c.Model.IsExpanded()">
-        <vface:TreeView vg-for="_, ch := range c.Model.Children()"></vface:TreeView>
+        <vface:TreeView vg-for="_, ch := range c.Model.Children()" :Model='ch'></vface:TreeView>
     </<vg-template>
 </div>
